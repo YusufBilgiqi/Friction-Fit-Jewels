@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friction Fit Jewels · Seitz Tooling &amp; Technique</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0608;
+  --surface:#180d10;
+  --card:#211319;
+  --card2:#281820;
+  --border:rgba(200,100,100,.09);
+  --border2:rgba(200,100,100,.18);
+  --bright:#f4ecea;
+  --text:#d4c4bc;
+  --sub:#b89898;
+  --dim:#8a6a6a;
+  --ruby:#d04858;
+  --ruby-dim:rgba(208,72,88,.11);
+  --ruby-mid:rgba(208,72,88,.22);
+  --gold:#d4a04a;
+  --gold-dim:rgba(212,160,74,.11);
+  --sage:#6a9870;
+  --sage-dim:rgba(106,152,112,.11);
+  --sky:#5888b0;
+  --sky-dim:rgba(88,136,176,.11);
+  --rose:#e07080;
+  --rose-dim:rgba(224,112,128,.11);
+  --sw:272px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:'Cormorant Garamond',serif;font-weight:300;font-size:16px;line-height:1.78;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 25% at 50% -5%,rgba(208,72,88,.07) 0%,transparent 65%);pointer-events:none;z-index:0;}
+.app{display:grid;grid-template-columns:var(--sw) 1fr;height:100vh;overflow:hidden;position:relative;z-index:1;}
+
+/* SIDEBAR */
+.sidebar{background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;overflow:hidden;}
+.sb-head{padding:22px 18px 0;flex-shrink:0;}
+.sb-gem{width:24px;height:24px;margin-bottom:10px;background:linear-gradient(135deg,var(--ruby) 0%,#8a1828 60%,#4a0810 100%);clip-path:polygon(50% 0%,100% 35%,80% 100%,20% 100%,0% 35%);box-shadow:0 0 10px rgba(208,72,88,.35);}
+.sb-title{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--bright);line-height:1.3;letter-spacing:.4px;margin-bottom:3px;}
+.sb-sub{font-family:'DM Mono',monospace;font-size:8px;color:var(--sub);letter-spacing:2px;text-transform:uppercase;line-height:1.6;}
+.sb-rule{height:1px;background:linear-gradient(90deg,var(--ruby-mid),transparent);margin:14px 0 6px;}
+.sb-nav{flex:1;overflow-y:auto;padding:0 10px 12px;}
+.sb-nav::-webkit-scrollbar{width:2px;}
+.sb-nav::-webkit-scrollbar-thumb{background:rgba(208,72,88,.25);}
+.sb-grp{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ruby);padding:14px 8px 5px;}
+.sb-item{padding:7px 10px;border-radius:3px;cursor:pointer;font-family:'Cormorant Garamond',serif;font-size:13.5px;color:var(--sub);display:flex;align-items:flex-start;gap:8px;transition:all .13s;line-height:1.35;}
+.sb-item:hover{background:var(--ruby-dim);color:var(--text);}
+.sb-item.active{background:var(--ruby-mid);color:var(--bright);font-weight:600;}
+.sb-n{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);flex-shrink:0;margin-top:2px;}
+.sb-item.active .sb-n{color:var(--ruby);}
+.sb-foot{padding:12px 18px;border-top:1px solid var(--border2);flex-shrink:0;}
+.sb-foot p{font-size:10px;color:var(--sub);line-height:1.7;font-family:'DM Mono',monospace;}
+
+/* MAIN */
+.main{overflow-y:auto;}
+.main::-webkit-scrollbar{width:3px;}
+.main::-webkit-scrollbar-thumb{background:rgba(208,72,88,.18);}
+.panel{display:none;padding:38px 46px 70px;max-width:860px;}
+.panel.active{display:block;}
+
+/* Page header */
+.ph{margin-bottom:28px;}
+.ph-eye{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--ruby);margin-bottom:12px;}
+.ph h1{font-family:'Cinzel',serif;font-size:30px;font-weight:700;color:var(--bright);line-height:1.1;margin-bottom:10px;letter-spacing:.4px;}
+.ph h1 em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--ruby);font-size:32px;}
+.ph p{font-size:15.5px;color:var(--text);max-width:630px;line-height:1.82;}
+.ph-rule{height:1px;background:linear-gradient(90deg,rgba(208,72,88,.4),rgba(212,160,74,.12),transparent);margin-top:22px;}
+
+/* Section divider */
+.sdiv{display:flex;align-items:center;gap:12px;margin:28px 0 14px;}
+.sdiv-tag{font-family:'DM Mono',monospace;font-size:7.5px;background:var(--ruby-dim);color:var(--ruby);border:1px solid rgba(208,72,88,.22);border-radius:2px;padding:2px 7px;flex-shrink:0;letter-spacing:2px;text-transform:uppercase;}
+.sdiv-line{flex:1;height:1px;background:var(--border2);}
+.sdiv-text{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--sub);flex-shrink:0;}
+
+/* Prose */
+.prose{font-size:15.5px;color:var(--text);line-height:1.85;margin:10px 0;}
+.prose strong{color:var(--bright);font-weight:600;}
+
+/* Callout */
+.callout{border-left:2px solid var(--ruby);padding:12px 16px;background:var(--ruby-dim);border-radius:0 4px 4px 0;margin:12px 0;font-size:14.5px;color:var(--text);line-height:1.78;}
+.callout.gold{border-color:var(--gold);background:var(--gold-dim);}
+.callout.sage{border-color:var(--sage);background:var(--sage-dim);}
+.callout.sky{border-color:var(--sky);background:var(--sky-dim);}
+.callout strong{color:var(--bright);font-weight:600;}
+
+/* Warning */
+.warn{background:var(--ruby-dim);border:1px solid rgba(208,72,88,.2);border-radius:4px;padding:13px 16px;margin:12px 0;display:flex;gap:10px;}
+.warn-icon{color:var(--ruby);flex-shrink:0;font-size:13px;margin-top:3px;}
+.warn-text{font-size:14.5px;color:var(--text);line-height:1.75;}
+.warn-text strong{color:var(--rose);font-weight:600;}
+
+/* Step list */
+.step-list{display:flex;flex-direction:column;gap:6px;margin:13px 0;}
+.step-item{display:flex;gap:14px;background:var(--card);border:1px solid var(--border2);border-radius:4px;padding:12px 16px;align-items:flex-start;}
+.step-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--ruby);min-width:22px;margin-top:3px;flex-shrink:0;}
+.step-title{font-size:12px;color:var(--bright);font-weight:600;margin-bottom:4px;line-height:1.35;font-family:'Cinzel',serif;letter-spacing:.3px;}
+.step-detail{font-size:14.5px;color:var(--text);line-height:1.75;}
+.step-detail strong{color:var(--bright);font-weight:600;}
+
+/* Card grid */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:7px;margin:13px 0;}
+.cg-card{background:var(--card);border:1px solid var(--border2);border-radius:4px;overflow:hidden;}
+.cg-head{padding:8px 13px;font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;}
+.cg-head.ruby{background:var(--ruby-dim);color:var(--ruby);border-bottom:1px solid rgba(208,72,88,.14);}
+.cg-head.gold{background:var(--gold-dim);color:var(--gold);border-bottom:1px solid rgba(212,160,74,.14);}
+.cg-head.sage{background:var(--sage-dim);color:var(--sage);border-bottom:1px solid rgba(106,152,112,.14);}
+.cg-head.sky{background:var(--sky-dim);color:var(--sky);border-bottom:1px solid rgba(88,136,176,.14);}
+.cg-body{padding:11px 13px;font-size:14.5px;color:var(--text);line-height:1.75;}
+.cg-body strong{color:var(--bright);}
+
+/* Tool reference table */
+.tr{width:100%;border-collapse:collapse;margin:13px 0;}
+.tr thead tr{border-bottom:1px solid var(--border2);}
+.tr th{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ruby);padding:9px 14px;text-align:left;}
+.tr td{padding:9px 14px;border-bottom:1px solid var(--border);font-size:14.5px;color:var(--text);vertical-align:top;line-height:1.7;}
+.tr tr:last-child td{border-bottom:none;}
+.tr tr:hover td{background:var(--card2);}
+.tr td:first-child{font-family:'DM Mono',monospace;font-size:11px;color:var(--ruby);white-space:nowrap;}
+.tr td strong{color:var(--bright);font-weight:600;}
+
+/* Size chart */
+.size-grid{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0;}
+.size-pill{font-family:'DM Mono',monospace;font-size:11px;background:var(--card2);border:1px solid var(--border2);border-radius:3px;padding:4px 9px;color:var(--text);}
+.size-pill.hi{background:var(--ruby-dim);border-color:rgba(208,72,88,.2);color:var(--bright);}
+
+/* Measurement steps */
+.m-steps{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:13px 0;}
+.m-card{background:var(--card);border:1px solid var(--border2);border-radius:4px;padding:13px;}
+.m-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--ruby);margin-bottom:6px;letter-spacing:1px;}
+.m-title{font-size:13px;color:var(--bright);font-weight:600;font-family:'Cinzel',serif;letter-spacing:.3px;margin-bottom:5px;}
+.m-body{font-size:14px;color:var(--text);line-height:1.7;}
+.m-body strong{color:var(--bright);}
+
+/* Spec box */
+.spec{background:var(--card);border:1px solid var(--border2);border-radius:4px;padding:14px 16px;margin:12px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+.spec-item{}
+.spec-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
+.spec-val{font-family:'DM Mono',monospace;font-size:18px;color:var(--ruby);line-height:1;}
+.spec-note{font-size:12px;color:var(--sub);margin-top:3px;line-height:1.4;}
+
+/* Mobile */
+.hamburger{display:none;position:fixed;top:14px;left:14px;z-index:100;background:var(--card);border:1px solid var(--border2);border-radius:3px;padding:8px 10px;cursor:pointer;color:var(--ruby);font-size:16px;}
+@media(max-width:820px){
+  .app{grid-template-columns:1fr;}
+  .sidebar{position:fixed;left:-100%;top:0;height:100vh;width:272px;z-index:99;transition:left .25s;}
+  .sidebar.open{left:0;}
+  .hamburger{display:block;}
+  .panel{padding:22px 18px 60px;}
+  .main{padding-top:50px;}
+  .m-steps{grid-template-columns:1fr;}
+  .spec{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+<div class="app">
+
+<aside class="sidebar">
+  <div class="sb-head">
+    <div class="sb-gem"></div>
+    <div class="sb-title">Friction Fit Jewels</div>
+    <div class="sb-sub">Seitz Tooling · Technique</div>
+    <div class="sb-rule"></div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-grp">Background</div>
+    <div class="sb-item active" onclick="nav(this,'p0')"><span class="sb-n">01</span>History &amp; Development</div>
+    <div class="sb-item" onclick="nav(this,'p1')"><span class="sb-n">02</span>Buying Vintage Sets</div>
+
+    <div class="sb-grp">Seitz Tooling</div>
+    <div class="sb-item" onclick="nav(this,'p2')"><span class="sb-n">03</span>The Frame &amp; Reamers</div>
+    <div class="sb-item" onclick="nav(this,'p3')"><span class="sb-n">04</span>Three Pusher Types</div>
+    <div class="sb-item" onclick="nav(this,'p4')"><span class="sb-n">05</span>Anvils, Stumps &amp; Stakes</div>
+    <div class="sb-item" onclick="nav(this,'p5')"><span class="sb-n">06</span>Hole Closers &amp; Burr Removal</div>
+    <div class="sb-item" onclick="nav(this,'p6')"><span class="sb-n">07</span>Premium Accessories</div>
+    <div class="sb-item" onclick="nav(this,'p7')"><span class="sb-n">08</span>Special-Purpose Accessories</div>
+
+    <div class="sb-grp">Jewel Types &amp; Sizing</div>
+    <div class="sb-item" onclick="nav(this,'p8')"><span class="sb-n">09</span>Train Jewel Configurations</div>
+    <div class="sb-item" onclick="nav(this,'p9')"><span class="sb-n">10</span>Selecting the Right Size</div>
+    <div class="sb-item" onclick="nav(this,'p10')"><span class="sb-n">11</span>Hole Size &amp; Pivot Clearance</div>
+
+    <div class="sb-grp">Removal &amp; Installation</div>
+    <div class="sb-item" onclick="nav(this,'p11')"><span class="sb-n">12</span>Removing Old Jewels</div>
+    <div class="sb-item" onclick="nav(this,'p12')"><span class="sb-n">13</span>Setting Depth &amp; Micrometer</div>
+    <div class="sb-item" onclick="nav(this,'p13')"><span class="sb-n">14</span>Pressing In Jewels</div>
+    <div class="sb-item" onclick="nav(this,'p14')"><span class="sb-n">15</span>Balance Hole Jewel Depth</div>
+  </nav>
+  <div class="sb-foot"><p>Friction Fit Jewels<br>Seitz Tooling · Jewel Selection<br>Removal &amp; Installation</p></div>
+</aside>
+
+<main class="main">
+
+<!-- 01 HISTORY -->
+<div class="panel active" id="p0">
+  <div class="ph">
+    <div class="ph-eye">Background · Section 01</div>
+    <h1>History &amp; <em>Development</em></h1>
+    <p>Friction jeweling began in Switzerland around 1920 but did not see significant use in the United States until the early 1930s. The technique required solving two distinct engineering problems before it could become practical.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">PROBLEMS</span><div class="sdiv-line"></div><span class="sdiv-text">Two Problems That Had to Be Solved</span></div>
+  <div class="cg">
+    <div class="cg-card"><div class="cg-head ruby">Problem 1 — Jewel Strength</div><div class="cg-body">Pressing a jewel into a plate with the force required for a reliable friction fit risked <strong>breaking the jewel</strong>. Natural ruby and sapphire, with their internal flaws, could not reliably withstand this pressure. The solution was the development of <strong>synthetic ruby and sapphire</strong> — far more uniform and stronger than natural material. Without synthetic corundum, friction jeweling at scale was impossible.</div></div>
+    <div class="cg-card"><div class="cg-head ruby">Problem 2 — Hole Centring</div><div class="cg-body">Early friction jewels did not always have their pivot holes perfectly centred. Some American watch companies solved this by first pressing the jewel into a <strong>brass setting</strong>, then — while the jewel and its hole were running true in a lathe — turning the outside diameter of the setting to size. This centred the hole in the setting. The setting was then frictioned into the plate.<br><br>Later improvements in jewel manufacturing made it possible to friction jewels directly into the plate with the hole reliably on centre — eliminating the need for intermediate settings.</div></div>
+  </div>
+
+  <div class="callout gold"><strong>Why friction jeweling mattered.</strong> Before friction jewels, jewels set in bezels made adjusting end shake impractical in many movements. Friction jewels could be pressed to a precise depth, enabling proper end shake setting during assembly — a significant improvement in both serviceability and performance.</div>
+</div>
+
+<!-- 02 BUYING VINTAGE SETS -->
+<div class="panel" id="p1">
+  <div class="ph">
+    <div class="ph-eye">Background · Section 02</div>
+    <h1>Buying <em>Vintage Sets</em></h1>
+    <p>Choosing the right jeweling tool depends on what era of movements you work on. Condition when buying vintage is critical — some components can be replaced, others cannot.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="cg">
+    <div class="cg-card"><div class="cg-head gold">Post-1930 Movements (Friction Jewels)</div><div class="cg-body">A <strong>Horia-style clone jewel press</strong> will work adequately on a budget. These cover the needs of friction-jeweled movements from the modern era and are more affordable than a full Seitz.</div></div>
+    <div class="cg-card"><div class="cg-head ruby">Pre-1930 Movements (Rubbed-In Jewels)</div><div class="cg-body">A <strong>Seitz press is needed</strong>. Seitz sets were designed specifically to work on the older movements with rubbed-in jewels and jewel settings — the Horia-style tool is not adequate for this work.</div></div>
+    <div class="cg-card"><div class="cg-head sage">Seitz Alternatives</div><div class="cg-body">Other brands exist — Favorite, C&amp;E Marshall, K&amp;D — but Seitz was the original and remains the standard. Parts availability and quality consistency are better for Seitz.</div></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">CONDITION</span><div class="sdiv-line"></div><span class="sdiv-text">What Can Be Replaced, What Cannot</span></div>
+  <div class="cg">
+    <div class="cg-card"><div class="cg-head sage">Can Be Replaced New</div><div class="cg-body"><strong>Pushers</strong> that cannot be redressed can still be purchased new for Seitz presses.<br><br><strong>Reamers</strong> that are damaged cannot usually be resharpened, but can also be purchased new.</div></div>
+    <div class="cg-card"><div class="cg-head ruby">Cannot Easily Be Replaced</div><div class="cg-body">The <strong>frame itself</strong> — damage to the frame or the micrometer mechanism is serious. Many vintage accessories can be bought separately on eBay, but the frame is the foundation.</div></div>
+  </div>
+
+  <div class="callout"><strong>Ask lots of questions when buying vintage.</strong> Try to buy as complete a set as possible. An incomplete set is not necessarily a deal-breaker if the missing accessories are available separately — but verify before committing. Condition of pushers and reamers should be specifically asked about.</div>
+</div>
+
+<!-- 03 FRAME & REAMERS -->
+<div class="panel" id="p2">
+  <div class="ph">
+    <div class="ph-eye">Seitz Tooling · Section 03</div>
+    <h1>The Frame <em>&amp; Reamers</em></h1>
+    <p>The Seitz frame is similar to a staking set but has a lever handle used to press down on the pusher holder. The reamers are used to bring the plate hole to the exact size required for the incoming jewel.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">REAMERS</span><div class="sdiv-line"></div><span class="sdiv-text">Size Range and Relationship to Jewels</span></div>
+  <p class="prose">Reamers are graduated in size and are <strong>0.01mm smaller than the jewel they are designed to prepare a hole for</strong>. This 0.01mm undersize creates the interference fit — the jewel is slightly larger than the hole, producing the friction that holds it securely.</p>
+
+  <div class="sdiv"><span class="sdiv-tag">SIZES</span><div class="sdiv-line"></div><span class="sdiv-text">Reamer Size Series (mm)</span></div>
+  <div class="size-grid">
+    <div class="size-pill">0.69</div><div class="size-pill">0.79</div><div class="size-pill">0.89</div><div class="size-pill">0.99</div>
+    <div class="size-pill">1.09</div><div class="size-pill">1.19</div><div class="size-pill">1.29</div><div class="size-pill">1.39</div>
+    <div class="size-pill">1.49</div><div class="size-pill">1.59</div><div class="size-pill">1.79</div><div class="size-pill">1.99</div>
+    <div class="size-pill">2.29</div><div class="size-pill">2.59</div><div class="size-pill hi">2.99</div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">TECHNIQUE</span><div class="sdiv-line"></div><span class="sdiv-text">Correct Reaming Technique</span></div>
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Always Turn Clockwise — Continuously</div><div class="step-detail">Never use a back-and-forth turning motion with the reamer. <strong>Always turn in a continuous clockwise direction</strong>. Back-and-forth motion causes the hole to go out of round and off-centre — the exact opposite of what is needed.</div></div></div>
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Never Lock or Hold the Plate Tight</div><div class="step-detail"><strong>Never hold the plate or bridge rigidly fixed while reaming.</strong> The plate must be free to move slightly — locking it causes the reamer to cut off-centre as the tool exerts sideways force. Let the plate find its own position on the anvil.</div></div></div>
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Using the Reamer as a Plunge Gauge</div><div class="step-detail">If the old jewel comes out in pieces and cannot be measured directly, the reamer can be used to determine the hole size. Insert a reamer and check whether it passes the cutting surface and into the burnishing section. <strong>A reamer that is the right size for a hole will insert past the cutter to the burnishing section.</strong> If it stops at the cutter, drop down one size and try again.</div></div></div>
+  </div>
+
+  <div class="callout"><strong>The reamer has two sections</strong> — a cutting surface and, above it, a burnishing surface. The burnishing surface is slightly smaller than the cutter and polishes the hole after cutting. The jewel size that fits a correctly reamed hole corresponds to the reamer's designation plus 0.01mm (i.e. the jewel is 0.01mm larger than the reamer).</div>
+</div>
+
+<!-- 04 THREE PUSHER TYPES -->
+<div class="panel" id="p3">
+  <div class="ph">
+    <div class="ph-eye">Seitz Tooling · Section 04</div>
+    <h1>Three <em>Pusher Types</em></h1>
+    <p>Three different pusher profiles exist in the Seitz set — each suited to a different jewel type or application. All three series share the same size graduation.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">SIZES</span><div class="sdiv-line"></div><span class="sdiv-text">Pusher Size Series — All Three Types (mm)</span></div>
+  <div class="size-grid">
+    <div class="size-pill">0.65</div><div class="size-pill">0.75</div><div class="size-pill">0.85</div><div class="size-pill">0.95</div>
+    <div class="size-pill">1.05</div><div class="size-pill">1.15</div><div class="size-pill">1.35</div><div class="size-pill">1.55</div>
+    <div class="size-pill">1.75</div><div class="size-pill">1.95</div><div class="size-pill">2.55</div><div class="size-pill hi">2.95</div>
+  </div>
+  <p class="prose" style="margin-top:6px;">Pushers are <strong>0.05mm smaller than the jewel they push</strong>. Any flat pusher can also be inverted and used as an anvil or stump.</p>
+
+  <div class="sdiv"><span class="sdiv-tag">TYPES</span><div class="sdiv-line"></div><span class="sdiv-text">Flat, Concave, and Pump</span></div>
+  <table class="tr">
+    <thead><tr><th>Pusher Type</th><th>Face Profile</th><th>Used For</th><th>Key Reason</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Flat Pusher</td>
+        <td>Flat face</td>
+        <td>Train jewels — pressing in and pushing out. Also used as an anvil when inverted.</td>
+        <td>Train jewels have flat faces; the flat pusher contacts the full jewel surface evenly.</td>
+      </tr>
+      <tr>
+        <td>Concave Pusher</td>
+        <td>Concave (dished) face</td>
+        <td>Pressing in <strong>convex balance hole jewels</strong>.</td>
+        <td>The concave face fits the convex face of the jewel and <strong>applies pressure near the jewel's edge</strong> — where it is strongest — rather than at the centre of the hole, where the jewel is weakest and most likely to crack under pressing force.</td>
+      </tr>
+      <tr>
+        <td>Pump Pusher</td>
+        <td>Concave face with a small centre pin ("pump centre")</td>
+        <td>Train or balance hole jewels — primarily for production use.</td>
+        <td>The pump centre drops into the jewel's pivot hole and <strong>self-centres the pusher on the jewel</strong> without manual alignment. Faster for large quantities; also protects the hole edge from damage caused by an off-centre flat pusher.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 05 ANVILS, STUMPS, STAKES -->
+<div class="panel" id="p4">
+  <div class="ph">
+    <div class="ph-eye">Seitz Tooling · Section 05</div>
+    <h1>Anvils, Stumps <em>&amp; Stakes</em></h1>
+    <p>Seitz calls these "stakes" — not to be confused with the stakes in a staking set. They support the plate or bridge during reaming or jewel pressing, and their selection affects both accuracy and the risk of distortion.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <p class="prose">Some anvils are solid; others have graduated holes through them. The <strong>hole in the anvil must be large enough for the jewel to pass through as it is pressed out</strong> — if the hole is too small the jewel will not clear and the plate will lift off the anvil before the jewel is free.</p>
+
+  <div class="cg">
+    <div class="cg-card"><div class="cg-head ruby">Solid Anvils</div><div class="cg-body">Used when pressing jewels in — the plate rests flat on the solid surface while the pusher presses the jewel into the hole from above. Also used for reaming operations.</div></div>
+    <div class="cg-card"><div class="cg-head ruby">Holed Anvils</div><div class="cg-body">Used when pressing jewels <strong>out</strong> — the hole allows the ejected jewel to fall through rather than catching between the jewel and the plate. The hole must be sized to clear the jewel.</div></div>
+    <div class="cg-card"><div class="cg-head gold">Platform Stake (Table)</div><div class="cg-body">The large flat platform — known as the "table" — is the main working surface. It is removed when smaller anvils need to be used in its place. The platform stake also serves as the mounting point for uprighting pins when installed.</div></div>
+  </div>
+
+  <div class="warn"><span class="warn-icon">⚠</span><div class="warn-text"><strong>The anvil must support the plate around the jewel hole.</strong> If the plate is not sitting flat — if there is a recess around the jewel hole that is not supported — the plate may bend or distort as the jewel is pushed out or in. Select an anvil whose diameter fits into any recess so the plate sits flat and fully supported.</div></div>
+</div>
+
+<!-- 06 HOLE CLOSERS & BURR REMOVAL -->
+<div class="panel" id="p5">
+  <div class="ph">
+    <div class="ph-eye">Seitz Tooling · Section 06</div>
+    <h1>Hole Closers <em>&amp; Burr Removal</em></h1>
+    <p>Two finishing operations are needed after reaming: closing an oversized hole, and removing the burr left by the reamer around the hole edge.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">HOLE CLOSERS</span><div class="sdiv-line"></div><span class="sdiv-text">Correcting a Slightly Oversized Hole</span></div>
+  <p class="prose">If a plate hole has been reamed slightly too large for the available jewel, a hole closer can be used to reduce it. The hole closer fits into the pusher holder and is used to close the hole by a maximum of <strong>0.01–0.02mm only</strong>. This is a minor correction — not a method for substantially reducing an oversized hole. Beyond this range, the plate material must be replaced or a larger jewel selected.</p>
+
+  <div class="sdiv"><span class="sdiv-tag">BURR</span><div class="sdiv-line"></div><span class="sdiv-text">Three Ways to Remove the Reaming Burr</span></div>
+  <p class="prose">The reaming process leaves a small burr of metal around the hole edge. This burr must be removed before pressing in the jewel — otherwise it will cause the jewel to sit proud or at an angle.</p>
+
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Dedicated Burr Removing Tool</div><div class="step-detail">Some Seitz sets include a purpose-made burr remover. Many vintage examples are in poor condition and would need to be dressed or replaced. New ones can be purchased from watch material suppliers.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Wheel Countersink (Preferred)</div><div class="step-detail">A <strong>wheel countersink</strong> (such as the Bergeon 1897) is one of the best alternatives. Available from watch material suppliers in sets of six. Some are double-ended: one disc has a sharp edge for cutting the countersink; the other has a rounded edge for burnishing and polishing the sink. Applied lightly around the hole edge until the burr is cleanly removed.</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Round Dental Burr</div><div class="step-detail">A round dental burr mounted in a pin vise works well as an improvised burr remover. Applied very lightly — only enough to remove the raised edge without cutting a significant countersink into the plate.</div></div></div>
+    <div class="step-item"><div class="step-num">↑</div><div class="step-body"><div class="step-title">In a Pinch — Oversized Reamer Bevel</div><div class="step-detail">If nothing else is available, the <strong>bevelled point of a reamer about two sizes larger than the hole</strong> can be used. Apply very lightly — the bevel will remove the burr without cutting the plate if used with care.</div></div></div>
+  </div>
+</div>
+
+<!-- 07 PREMIUM ACCESSORIES -->
+<div class="panel" id="p6">
+  <div class="ph">
+    <div class="ph-eye">Seitz Tooling · Section 07</div>
+    <h1><em>Premium</em> Accessories</h1>
+    <p>More complete Seitz sets include accessories that significantly extend capability — particularly useful for working with small bridges and jewel settings.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <table class="tr">
+    <thead><tr><th>Accessory</th><th>Purpose</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Face Plate</td><td>Holds small bridges and balance cocks securely while reaming</td><td>Very useful — small bridges are otherwise difficult to hold still. The face plate clamps the bridge and squares it to the reamer axis.</td></tr>
+      <tr><td>Grind Stone</td><td>Flattens pusher faces when they become dished or worn</td><td>Most vintage examples are in poor condition. Used by moving back and forth while pressing the spindle head down onto the stone. May need to be dressed or replaced. A video alternative exists for flattening pushers without the grindstone.</td></tr>
+      <tr><td>Jewel Setting Collets</td><td>Holds jewel settings (chatons) for pressing jewels into them directly, or reaming the setting's hole</td><td>Full set: 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.8, 2.0, 2.3, 2.6, 3.0mm. Setting placed in collet; collet placed in table; central knob tightens a dog that locks the setting. Enables working on the setting independently of the plate. Some sets include pre-made brass settings in aluminium vials.</td></tr>
+      <tr><td>Uprighting Pins</td><td>Re-centres a worn oval pivot hole relative to the opposing pivot hole before bushing</td><td>The spring-loaded pin goes in the good hole; the damaged hole is then reamed around it, keeping the new hole centred on the same axis. See Section 08 for full procedure.</td></tr>
+      <tr><td>Pivot Gauge</td><td>Measures pivot diameters directly</td><td>Jewelled holes from 0.07mm to 0.50mm in 0.01mm increments. Expensive separately; often found damaged from misuse. A quality digital micrometer is a better investment with far more uses.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 08 SPECIAL-PURPOSE ACCESSORIES -->
+<div class="panel" id="p7">
+  <div class="ph">
+    <div class="ph-eye">Seitz Tooling · Section 08</div>
+    <h1>Special-Purpose <em>Accessories</em></h1>
+    <p>Several accessories serve very specific functions beyond standard jewel work. Some are indispensable; others are nice-to-haves with readily available alternatives.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Setting Lever Pushers</div><div class="step-detail">One stake and two pointed pushers. Used to <strong>adjust the pallet fork up or down</strong> when correcting clearance between the pallet jewels and the escape wheel. A specialised but genuinely useful tool for pallet geometry correction.</div></div></div>
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Lanterning Tools</div><div class="step-detail">One stump and one pusher. Designed to <strong>tighten loose cannon pinions</strong> — but equally useful for tightening the pipes on second hands. The Seitz press's micrometer control allows adjustments under 1/100th of a mm, making it far more controlled than any hand method.</div></div></div>
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Hour Hand Tightening Pushers</div><div class="step-detail">Four sizes of pushers for closing hour hand pipes. The precision of the Seitz press makes these <strong>very valuable</strong> — small, repeatable adjustments to hand pipe diameter that would be difficult to achieve consistently with other methods.</div></div></div>
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Knurled Knob</div><div class="step-detail">Screws onto the micrometer spindle, converting the Seitz lever-press action into a <strong>screw-controlled downward movement</strong> — similar to the Horia style tool. Gives greater feel and control over pressing depth, particularly useful for delicate operations.</div></div></div>
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Spindle with Collets</div><div class="step-detail">Holds cutting broaches, smoothing broaches, and micro drill bits. Useful but most staking sets offer something similar. Not worth overpaying for separately.</div></div></div>
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Pivot Straighteners</div><div class="step-detail">Included in premium sets for balance and train pivots. The source's assessment: a better name would be <em>pivot breakers</em> — <strong>"I have never seen them used successfully to straighten a pivot."</strong> Treat them as a curiosity rather than a reliable tool.</div></div></div>
+    <div class="step-item"><div class="step-num">→</div><div class="step-body"><div class="step-title">Collet Holder</div><div class="step-detail">Primarily for holding winding stems while cutting and fitting them for crowns. A regular pin vise is more than adequate for this task — useful if it comes with the set, but not worth seeking out separately.</div></div></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">UPRIGHTING</span><div class="sdiv-line"></div><span class="sdiv-text">Full Uprighting Procedure</span></div>
+  <p class="prose">When a pivot hole in a bridge is worn oval but the opposing pivot hole in the mainplate is sound, uprighting restores the axis relationship before a new bushing is fitted.</p>
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Assemble Bridge onto Mainplate</div><div class="step-detail">Install the bridge onto the mainplate in its normal position. Both plates together in assembled relationship.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Place Good Hole Over the Spring-Loaded Pin</div><div class="step-detail">Install the correctly-sized uprighting pin into the press frame (with the table platform removed). Place the <strong>good, undamaged pivot hole over the spring-loaded pin</strong>. This pin now establishes the axis — it defines where the upper hole should be relative to the lower.</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Ream the Damaged Hole</div><div class="step-detail">With the axis established by the pin below, ream the damaged upper hole to the correct size for a new bushing. The pin ensures the reamed hole is centred on the correct axis — not on the worn, off-centre original hole.</div></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">Press In and Ream the New Bushing</div><div class="step-detail">Press the new bushing into the enlarged hole. Ream the bushing's bore to fit the pivot, then broach if needed to achieve the correct clearance for the pivot or centre jewel hole.</div></div></div>
+  </div>
+</div>
+
+<!-- 09 TRAIN JEWEL CONFIGURATIONS -->
+<div class="panel" id="p8">
+  <div class="ph">
+    <div class="ph-eye">Jewel Types · Section 09</div>
+    <h1>Train Jewel <em>Configurations</em></h1>
+    <p>Friction fit train jewels come in only two hole configurations — and one additional classification for centre wheel jewels. The jewel's curved edge always goes into the hole first.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="cg">
+    <div class="cg-card"><div class="cg-head ruby">Straight-Sided with Curved Edge</div><div class="cg-body">All friction train jewels share this basic form — straight outer sides with a curved (radiused) edge on the oil-sink side. <strong>The curved edge goes into the plate hole first</strong> when pressing in. This design allows the jewel to be pressed smoothly without the edge catching.</div></div>
+    <div class="cg-card"><div class="cg-head gold">Centre Wheel Jewels</div><div class="cg-body">Classified separately because of their <strong>large centre hole</strong>. The bore is much wider than a standard train jewel due to the larger diameter of the centre wheel arbor. Sizing and selection follows the same principles but the hole dimension is in a different range.</div></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">HOLE TYPES</span><div class="sdiv-line"></div><span class="sdiv-text">Cylindrical vs. Olive (Olived) Hole</span></div>
+  <div class="cg">
+    <div class="cg-card"><div class="cg-head ruby">Cylindrical Hole Jewels</div><div class="cg-body">A plain straight bore through the jewel. Found in <strong>most train jewels</strong> across standard-grade movements. Available from 0.80mm to 3.0mm outside diameter.</div></div>
+    <div class="cg-card"><div class="cg-head gold">Olive (Olived) Hole Jewels</div><div class="cg-body">The bore is convex inside — widest at the centre, narrowing at each face. Found in <strong>high-grade movements</strong>. Reduces contact area between pivot and jewel in vertical positions, equalising friction across watch orientations. Available from 0.70mm to 1.2mm outside diameter.</div></div>
+  </div>
+</div>
+
+<!-- 10 SELECTING SIZE -->
+<div class="panel" id="p9">
+  <div class="ph">
+    <div class="ph-eye">Jewel Types · Section 10</div>
+    <h1>Selecting <em>the Right Size</em></h1>
+    <p>Jewel outside diameter must be determined first, then pivot hole size. If the ideal jewel is not available in the exact diameter, a larger diameter can be used — but the plate hole must be enlarged to match.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">DIAMETER</span><div class="sdiv-line"></div><span class="sdiv-text">Standard Jewel Outside Diameters (mm)</span></div>
+  <div class="size-grid">
+    <div class="size-pill">0.70</div><div class="size-pill">0.80</div><div class="size-pill">0.90</div><div class="size-pill">1.00</div>
+    <div class="size-pill">1.10</div><div class="size-pill">1.20</div><div class="size-pill">1.30</div><div class="size-pill">1.40</div>
+    <div class="size-pill">1.50</div><div class="size-pill">1.60</div><div class="size-pill">1.80</div><div class="size-pill">2.00</div>
+    <div class="size-pill">2.30</div><div class="size-pill">2.60</div><div class="size-pill hi">3.00</div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">METHOD</span><div class="sdiv-line"></div><span class="sdiv-text">How to Determine the Required Diameter</span></div>
+  <div class="m-steps">
+    <div class="m-card"><div class="m-num">IF JEWEL COMES OUT INTACT</div><div class="m-title">Measure the Old Jewel</div><div class="m-body">Use a digital micrometer to measure the outside diameter of the removed jewel directly. Select a new jewel with the same diameter. This is the preferred method — most reliable.</div></div>
+    <div class="m-card"><div class="m-num">IF JEWEL COMES OUT IN PIECES</div><div class="m-title">Use the Reamer as a Gauge</div><div class="m-body">Insert a reamer into the hole. If it passes the cutting surface into the burnishing section — this reamer's corresponding jewel size is correct. If it stops at the cutter — drop one size down and try again. Work down until the reamer slides past the cutter.</div></div>
+  </div>
+
+  <div class="callout"><strong>If the exact diameter is unavailable:</strong> Select a jewel one size larger than the original. Enlarge the plate hole with the appropriate reamer to fit the wider jewel. <strong>Always select the same diameter as the original if possible</strong> — enlarging the plate hole is a last resort, not a first choice.</div>
+</div>
+
+<!-- 11 HOLE SIZE & PIVOT CLEARANCE -->
+<div class="panel" id="p10">
+  <div class="ph">
+    <div class="ph-eye">Jewel Types · Section 11</div>
+    <h1>Hole Size <em>&amp; Pivot Clearance</em></h1>
+    <p>Once the outside diameter is known, the pivot hole size must be determined. The clearance specification differs between jewel types.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-item"><div class="spec-label">Train jewel hole</div><div class="spec-val">+0.02mm</div><div class="spec-note">over pivot diameter</div></div>
+    <div class="spec-item"><div class="spec-label">Balance hole jewel</div><div class="spec-val">+0.01mm</div><div class="spec-note">over pivot diameter — tighter fit</div></div>
+    <div class="spec-item"><div class="spec-label">Pallet hole jewel</div><div class="spec-val">+0.01mm</div><div class="spec-note">over pivot diameter</div></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">METHOD</span><div class="sdiv-line"></div><span class="sdiv-text">Determining Pivot Hole Size</span></div>
+  <div class="cg">
+    <div class="cg-card"><div class="cg-head sage">Old Jewel Hole Intact</div><div class="cg-body">Use <strong>plug gauges or pin gauges</strong> to measure the existing hole directly. Pin gauges can be purchased, or made by mounting old wheel arbors in pegwood — a practical shop-made solution.</div></div>
+    <div class="cg-card"><div class="cg-head ruby">Old Jewel Hole Damaged</div><div class="cg-body">Measure the <strong>pivot itself</strong> with a digital micrometer. Then select a jewel with a hole that is <strong>0.02mm larger than the pivot</strong> (for train jewels) or <strong>0.01mm larger</strong> (for balance or pallet hole jewels).</div></div>
+  </div>
+</div>
+
+<!-- 12 REMOVING OLD JEWELS -->
+<div class="panel" id="p11">
+  <div class="ph">
+    <div class="ph-eye">Removal &amp; Installation · Section 12</div>
+    <h1>Removing <em>Old Jewels</em></h1>
+    <p>Always push from the correct side — and always support the plate properly. An unsupported plate will bend before the jewel releases.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Select Anvil with Clearance Hole</div><div class="step-detail">Choose a stump with a hole large enough for the jewel to fall through as it is pressed out. The stump must be the right diameter to fit into any recess around the jewel hole — so the plate sits <strong>flat on the stump, fully supported around the hole</strong>.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Select the Correct Pusher</div><div class="step-detail">Select a flat pusher or pump pusher that is <strong>slightly smaller than the jewel</strong>. Too large and the pusher will catch the plate around the jewel; too small and it may tip into the hole and damage the jewel seat.</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Orient the Plate Correctly</div><div class="step-detail"><strong>Place the plate with the oil-sink side facing down on the stump.</strong> Push down on the flat side of the jewel. Exception: a balance hole jewel is pushed out from the <em>inside</em> of the plate (and pushed back in from the <em>outside</em>).</div></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">Centre the Pusher and Press</div><div class="step-detail">Bring the pusher down, centred on the jewel. Press smoothly — the jewel should release with moderate, even pressure and fall into the hole in the stump below.</div></div></div>
+  </div>
+
+  <div class="warn"><span class="warn-icon">⚠</span><div class="warn-text"><strong>If the plate is not fully supported around the hole, it will bend.</strong> This is a common and easily avoided mistake. Take the time to select an anvil that supports the plate flat — a bent plate is a far bigger problem than a stubborn jewel.</div></div>
+</div>
+
+<!-- 13 SETTING DEPTH & MICROMETER -->
+<div class="panel" id="p12">
+  <div class="ph">
+    <div class="ph-eye">Removal &amp; Installation · Section 13</div>
+    <h1>Setting Depth <em>&amp; Micrometer</em></h1>
+    <p>The Seitz micrometer is graduated in 0.01mm increments. Before removing the old jewel, the micrometer can be indexed to its exact depth — so the new jewel can be pressed to precisely the same position.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">INDEXING</span><div class="sdiv-line"></div><span class="sdiv-text">Recording the Old Jewel Depth Before Removal</span></div>
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Set Up Tool with Stump and Pusher</div><div class="step-detail">Select the stump and pusher that will be used for pressing in the new jewel. Install both fully in the tool — they must be fully seated before taking any measurement.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Lower Pusher onto Old Jewel</div><div class="step-detail">Place the plate with the old jewel in position on the stump. Turn the micrometer clockwise to lower the pusher until it <strong>just rests on the flat face of the old jewel</strong>. Read the micrometer and record this number.</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Calculate Press-Out Depth</div><div class="step-detail">Remove the plate. Turn the micrometer clockwise <strong>one full revolution</strong> (= 1mm) past the recorded reading. If the reading was 0.03, turn one full turn and stop at 0.03 again — the pusher is now 1mm lower than before, enough to push out most jewels encountered in normal work.</div></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">Press In New Jewel to Same Depth</div><div class="step-detail">With the new jewel positioned in the hole and the micrometer returned to the original recorded measurement, press in the new jewel. The micrometer stop will halt the pusher at exactly the same depth as the original jewel sat.</div></div></div>
+  </div>
+
+  <div class="callout gold"><strong>Flush vs. below-flush.</strong> If the new jewel is to be pressed flush with the plate surface, the micrometer depth-stop is not needed — press until the jewel is level with the plate. Depth indexing is only required when the jewel must sit below flush — most critically for balance hole jewels, where the precise oil gap between the jewel and the endstone is set by depth.</div>
+</div>
+
+<!-- 14 PRESSING IN JEWELS -->
+<div class="panel" id="p13">
+  <div class="ph">
+    <div class="ph-eye">Removal &amp; Installation · Section 14</div>
+    <h1>Pressing <em>In Jewels</em></h1>
+    <p>With the old jewel removed and the depth measurement recorded, pressing in the new jewel is straightforward — provided the pusher selection and orientation are correct.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Select Correct Pusher</div><div class="step-detail">For a jewel pressed <strong>below flush</strong>: select a flat or pump pusher <strong>slightly smaller</strong> than the jewel.<br>For a jewel pressed <strong>flush</strong>: select a flat or pump pusher <strong>slightly larger</strong> than the jewel — the larger pusher face helps distribute force over the entire surface and ensures the jewel sits level.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Dial In the Depth Setting</div><div class="step-detail">If pressing below flush, set the micrometer to the depth recorded before the old jewel was removed. If pressing flush, no depth stop is needed.</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Position the Jewel</div><div class="step-detail">Place the jewel in the hole with the <strong>flat side facing up</strong> (oil-sink side down, into the plate). Place the plate on the stump. Bring the pusher down, centred on the jewel.</div></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">Press In Smoothly</div><div class="step-detail">Apply steady lever pressure. The jewel should press in smoothly and stop at the micrometer setting. Do not force beyond the stop.</div></div></div>
+  </div>
+
+  <div class="callout"><strong>Balance hole jewel direction:</strong> the balance hole jewel is pushed out from the <em>inside</em> of the plate and pressed in from the <em>outside</em> — opposite to most train jewels. Always confirm orientation before pressing.</div>
+</div>
+
+<!-- 15 BALANCE HOLE JEWEL DEPTH -->
+<div class="panel" id="p14">
+  <div class="ph">
+    <div class="ph-eye">Removal &amp; Installation · Section 15</div>
+    <h1>Balance Hole Jewel <em>Depth</em></h1>
+    <p>The balance hole jewel must be set to a precise depth below flush — not pressed flush with the plate. The gap between the jewel's top surface and the plate surface is the oil space for the endstone assembly.</p>
+    <div class="ph-rule"></div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-item"><div class="spec-label">Standard oil gap</div><div class="spec-val">0.02mm</div><div class="spec-note">Below flush — jewel top to plate surface</div></div>
+    <div class="spec-item"><div class="spec-label">Note</div><div class="spec-val" style="font-size:13px;line-height:1.3;">Varies by calibre — always measure both the plate and the jewel depth to confirm.</div></div>
+  </div>
+
+  <div class="sdiv"><span class="sdiv-tag">MEASURING</span><div class="sdiv-line"></div><span class="sdiv-text">How to Measure the 0.02mm Depth Accurately</span></div>
+  <div class="step-list">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Set Up the Tool</div><div class="step-detail">Select a stump to support the plate or balance cock. Place it in the frame. Select <strong>the smallest flat pusher in the set</strong> and place it in the pusher holder.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Measure the Plate Surface</div><div class="step-detail">Place the plate or balance cock on the stump. Bring the pusher down onto the <strong>plate surface beside the jewel</strong> — on the flat area where the endstone will sit. Back the micrometer stop up against the pusher holder head to index this position. Record the micrometer reading.</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Measure the Jewel Top Surface</div><div class="step-detail">Move the plate on the stump so the pusher is now over the <strong>centre of the jewel</strong>. Slowly turn the micrometer stop until the pusher just touches the top of the jewel. Record this second reading.</div></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">Calculate the Depth</div><div class="step-detail">The difference between the two readings is <strong>how far below flush the jewel currently sits</strong>. If fitting a new jewel, press it in until this difference equals 0.02mm (or the calibre-specific specification). The micrometer stop is set accordingly to halt the pusher at the correct depth.</div></div></div>
+  </div>
+
+  <div class="callout gold"><strong>Why this matters.</strong> Too little gap: the endstone sits too close to the balance hole jewel — insufficient space for the oil ring to form, and the jewel may actually contact the endstone. Too much gap: the oil cannot bridge across to form a proper ring and will break away. The 0.02mm specification is not approximate — it is the designed oil space for the assembly.</div>
+</div>
+
+</main>
+</div>
+<script>
+function nav(el,id){
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+  if(window.innerWidth<=820)document.querySelector('.sidebar').classList.remove('open');
+  document.querySelector('.main').scrollTop=0;
+}
+</script>
+</body>
+</html>
